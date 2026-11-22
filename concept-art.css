@@ -1,0 +1,11 @@
+.hgw-concepts {
+  max-width: 72rem;
+  margin: 1rem auto;
+  padding-inline: 1rem;
+}
+.hgw-concepts figure { margin: 1rem 0; }
+.hgw-concepts a { display: block; }
+.hgw-concepts a:focus-visible { outline: 3px solid #176b55; outline-offset: 4px; }
+.hgw-concepts img { display: block; width: 100%; height: auto; border-radius: .75rem; }
+.hgw-concepts figcaption { margin-block-start: .35rem; font-weight: 600; }
+.hgw-concept-emblem { display: block; width: clamp(5rem, 14vw, 9rem); height: auto; margin-block-end: 1rem; border-radius: .75rem; }
