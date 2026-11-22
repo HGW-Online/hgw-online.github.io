@@ -55,3 +55,6 @@ These are **routing scenarios, not legal conclusions or a complete current legal
 - Privacy laws require minimization -> don't collect unnecessary identity.
 - Mid-transaction country/service changes -> recompute applicability and invalidate stale approval.
 - Completion -> only success-commission after contractually confirmed success.
+
+## Knowledge and intellectual-property asset rules
+For patent, algorithm, software, know-how, trade secret, copyright or other IP deals, activate applicable seller/owner and buyer jurisdictions, the scope of territorial protection, assignment/registration formalities, co-owner or employer consent, royalty/tax obligations, export restrictions for sensitive technology, confidentiality obligations, and legally required IP security-interest registration for collateral. Require independently documented chain of title and existing license/encumbrance checks. Keep proprietary algorithms, unreleased inventions, source code and secret data outside public listing payloads. Unknown/contested ownership -> HOLD_REVIEW; legally prohibited transfer -> BLOCKED.
