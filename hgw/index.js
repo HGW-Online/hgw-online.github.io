@@ -5,7 +5,8 @@ const count = document.querySelector('#count');
 const sourceList = document.querySelector('#source-list');
 const picker = document.querySelector('#language');
 const languageKey = 'hgw-unified-language';
-let selected = '';
+const requestedSector = new URL(location.href).searchParams.get('sector');
+let selected = catalog.some(section => section.id === requestedSector) ? requestedSector : '';
 let savedLanguage;
 try {
   savedLanguage = localStorage.getItem(languageKey);
@@ -83,6 +84,17 @@ function render() {
   for (const {section, pages} of matches) {
     const card = element('article', '', modules);
     card.id = section.id;
+    const artwork = {operations: 'energy', market: 'circular', digital: 'digital', knowledge: 'research', platform: 'commerce'}[section.id];
+    if (artwork) {
+      const illustration = element('img', '', card);
+      illustration.className = 'sector-illustration';
+      illustration.src = '../images/projects/' + artwork + '.webp';
+      illustration.alt = '';
+      illustration.width = 480;
+      illustration.height = 480;
+      illustration.loading = 'lazy';
+      illustration.decoding = 'async';
+    }
     element('h2', section.title, card);
     element('p', section.description, card);
     element('p', guide[section.id][language], card);

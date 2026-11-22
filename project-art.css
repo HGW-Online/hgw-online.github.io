@@ -1,0 +1,25 @@
+.project-art {
+  max-width: 72rem;
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 4vw, 2rem);
+  color: #16382f;
+}
+.project-art h2 { margin-block: 0 1rem; }
+.project-art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+}
+.project-art-card {
+  display: block;
+  overflow: hidden;
+  border: 1px solid #b4cec2;
+  border-radius: .85rem;
+  background: #edf6f2;
+  color: #16382f;
+  text-decoration: none;
+}
+.project-art-card:focus-visible { outline: 3px solid #176b55; outline-offset: 3px; }
+.project-art-card:hover span { text-decoration: underline; }
+.project-art-card img { display: block; width: 100%; height: auto; }
+.project-art-card span { display: block; padding: .85rem; font-weight: 700; }

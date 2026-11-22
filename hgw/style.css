@@ -41,3 +41,11 @@ select{font:inherit;color:inherit;background:#102023;border:1px solid #4d6c69;bo
 .solidarity h2 { margin-block: 0 .5rem; font-size: 1.1rem; }
 .solidarity ul { margin: 0; padding-inline-start: 1.1rem; color: #d6e8e4; line-height: 1.6; }
 .solidarity li + li { margin-block-start: .4rem; }
+
+.sector-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: .6rem;
+  margin-block-end: .75rem;
+}
