@@ -33,3 +33,6 @@ HGW is a commercial agent or proposed global platform cooperative, not a reselle
 
 ## Acceptance criteria
 One duly authorized partner feed with documented license; a live permitted listing, buyer-side Arabic translation, at least two actual provider quotes, customs eligibility, source attribution, audit logs, tested price/takedown sync and signed commercial-agency and democratic governance principles where applicable. Before these, the interface stays clearly marked DEMO.
+
+## Global coordinator and success fee (policy update)
+HGW is the neutral independent intermediary coordinating parties, **not** a bank, goods owner, insurer, guarantee provider or a universal licensed intermediary. Success-only HGW brokerage commissions accrue upon contractually defined completed and verified transaction, subject to reversal/refunds and statutory obligations. Optional independent providers may separately charge for services actually commissioned, even where a goods transaction does not close. See [Global coordinator charter](GLOBAL-COORDINATOR-CHARTER.md).
