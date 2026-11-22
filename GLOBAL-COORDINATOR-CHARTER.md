@@ -1,7 +1,7 @@
 # HGW Global Coordinated Marketplace — Organizational & Operating Charter (proposal v0.1)
 
 ## Identity and purpose
-HGW is proposed as a comprehensive global commercial coordination marketplace, potentially organized as an international platform cooperative with a **non-profit parent entity** that owns a **commercial holding company**, and independent legal and media/information platforms. These entities, ownership rights, and any worldwide branches are **targets, not verified existing legal registrations**. Actual setup depends on incorporation documents, national licensing, tax advice, governance and commercial contracts.
+HGW is proposed as a comprehensive global commercial coordination marketplace, potentially organized as an international platform cooperative with a **non-profit parent entity** that owns a **commercial holding company**, and independent legal and media/information platforms. These entities, ownership rights, are proposed structural elements, not verified legal registrations. Actual setup depends on incorporation documents, national licensing, tax advice, governance and commercial contracts.
 
 ## What the marketplace is
 A neutral marketplace and contractually authorized commercial intermediary facilitating matching and introductions among sellers/owners, buyers, inspectors, appraisers, qualified guarantors, licensed insurers, freight operators, customs brokers, legal specialists and regulated payment providers. Each counterparty maintains its own rights, liabilities, prices and independence.
@@ -27,8 +27,12 @@ HGW does **not** by default own listed goods/assets, guarantee transactions, ins
 - Gross third-party sale value is not HGW revenue. HGW revenue is only its accrued earned fees and other separate lawful income, if any.
 - After operating expenses, legal obligations, taxes and reserves, any lawfully distributable surplus is allocated through member-approved special/general performance incentives under the organization's valid bylaws.
 
-## Worldwide operations
-Expand via registered branches/subsidiaries or qualified independent local partners in each jurisdiction only after country/product/service-specific assessment. Rules differ in consumer protection, identity, privacy, agency, real estate, financial instruments, digital assets, insurance, import/export, payment services, AML, taxes, data localization and charity status. A platform cannot be legally compliant with every country merely by stating so; restrict unsupported categories/locations.
+## Transaction-triggered jurisdictional matrix, not global blanket compliance
+HGW uses a **switchable jurisdiction-specific compliance activation matrix**, not an assertion of compliance with every law worldwide. At browsing stage, activate only relevant public-content/privacy rules; at transaction or quote stage, evaluate seller, buyer, asset location, destination, regulated provider and payment jurisdictions. Record each jurisdiction's mandatory minimum for registration, licensing, identity/KYC/KYB obligations (where legally applicable), and consumer protection. Block or hold unsupported activity rather than presuming permission.
+
+Where legal systems conflict, treat it as an expected routing condition: accumulate compatible duties and escalate contradictions to local legal review; a permissive country does not override mandatory prohibitions elsewhere. Scale with a **network of properly licensed local partners in priority markets** rather than assuming HGW needs a branch in every country. Partner license validity and scope must be independently verified.
+
+See [Compliance activation matrix specification](COMPLIANCE-MATRIX-SPEC.md) and [interactive design demo](compliance-matrix.html).
 
 ## Conflict-of-interest and accountability
 Disclose fees and beneficial relationships. Preserve user choice of inspectors, carriers and insurers; permit independent qualified alternatives. Regulators and certified providers remain responsible for regulated functions. Maintain vendor due diligence, performance monitoring, contracts, redress and audit trails.
@@ -42,4 +46,4 @@ Disclose fees and beneficial relationships. Preserve user choice of inspectors, 
 6. Run a small audited pilot with explicit seller/buyer consent; confirm and reconcile the actual success event; record fees and refunds.
 7. Audit governance, dispute procedures and secure data handling before broad rollout.
 
-**Current status:** planning/demo website and GitHub implementation materials only; no verified global branches, legal establishment, licensed financial or guarantee activities, real-world successful commissions or identity platform integration claimed.
+**Current status:** planning/demo website and GitHub implementation materials only; no verified international partner licenses, legal establishment, licensed financial or guarantee activities, real-world successful commissions or identity platform integration claimed.
