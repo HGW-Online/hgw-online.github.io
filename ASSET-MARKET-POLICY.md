@@ -39,3 +39,6 @@ The pages currently provide category browsing, local-only demo listings, settlem
 4. Build central database with access controls, abuse prevention, auditable consent and order state machine.
 5. Validate legal title, financial instruments, eligible collateral and quote validity; independent appraisals.
 6. Test limited permitted transactions under human oversight before any live roll-out.
+
+## Marketplace role and conditional success commission
+HGW facilitates counterparties; it is not the owner, guarantor, bank, insurer, lender or custodian. Brokerage commissions apply only to contractually defined successful and verified transactions, with refund/dispute rules. Fees owed to independent optional service providers remain separate. The target international nonprofit-owned holding company and local branches are aspirational until incorporation and licensing. See [Global coordinator charter](GLOBAL-COORDINATOR-CHARTER.md).
