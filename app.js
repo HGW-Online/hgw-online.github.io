@@ -1,4 +1,4 @@
-/* Eco Smart Mall — privacy-safe prototype. All state is local to this browser. */
+/* HGW — privacy-safe prototype. All state is local to this browser. */
 'use strict';
 (function () {
   const STORE_KEY = 'eco-smart-mall-demo-v2';
@@ -23,14 +23,25 @@
   const deepCopy = v => JSON.parse(JSON.stringify(v));
   const safe = v => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const currency = n => '$' + Number(n).toFixed(2);
+  const POINTS_PER_USD = 1; // Demo earning rule: one point per whole USD of a fulfilled demo order.
+  const TIERS = [{name:'Gold',min:500,icon:'🥇'},{name:'Silver',min:250,icon:'🥈'},{name:'Bronze',min:0,icon:'🥉'}];
+  const tierFor = pts => TIERS.find(x=>pts>=x.min);
+  const normalize = s => {
+    const o=Object.assign(deepCopy(seed),s);
+    ['members','voted'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=deepCopy(seed[k]);});
+    if(!Number.isInteger(o.nextOrder)||o.nextOrder<1)o.nextOrder=1;
+    o.cart=o.cart.filter(i=>i&&Number.isInteger(i.qty)&&i.qty>0&&o.products.some(p=>p.id===i.id));
+    o.members.forEach(m=>{if(!Array.isArray(m.ledger))m.ledger=[];});
+    return o;
+  };
   const load = () => {
     try {
       const stored=JSON.parse(localStorage.getItem(STORE_KEY));
-      if(stored && Array.isArray(stored.products) && Array.isArray(stored.orders) && Array.isArray(stored.cart) && Array.isArray(stored.proposals)) return stored;
+      if(stored && Array.isArray(stored.products) && Array.isArray(stored.orders) && Array.isArray(stored.cart) && Array.isArray(stored.proposals)) return normalize(stored);
     } catch(e) {}
     return deepCopy(seed);
   };
-  let db=load(),lang='ar',page=(document.body?.dataset.section||'allprojects'),orderFilter='all',productQuery='';
+  let db=load(),lang=(()=>{try{return localStorage.getItem('hgw-lang')==='en'?'en':'ar';}catch(e){return 'ar';}})(),page=(document.body?.dataset.section||'allprojects'),orderFilter='all',productQuery='';
   const T=(ar,en)=>lang==='ar'?ar:en;
   const product=id=>db.products.find(p=>p.id===id);
   const orderValue=o=>o.items.reduce((sum,i)=>sum+(product(i.id)?.price||0)*i.qty,0);
@@ -48,11 +59,12 @@
   ];
   const navItems=[['allprojects','▥','دليل الأقسام','Section directory'],...sectionGroups.flatMap(g=>g.items)];
   function navButton([id,icon,ar,en]){return '<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>';}
+  function flash(msg){try{sessionStorage.setItem('hgw-flash',msg);}catch(e){}}
   function navigate(id){
     const known=id==='allprojects'||navItems.some(x=>x[0]===id)||sectionGroups.some(g=>'group-'+g.id===id);
     if(!known)return;
     if(window.location&&typeof window.location.assign==='function'){
-      window.location.assign('./'+(id==='allprojects'?'index':id)+'.html?v=20261029.3');
+      window.location.assign('./'+(id==='allprojects'?'index':id)+'.html?v=20261122.1');
       return;
     }
     page=id;render();window.scrollTo(0,0);
@@ -83,6 +95,8 @@
     HGWAbundance.banks.forEach(b=>{views['bank-'+b.id]=()=>HGWAbundance.renderBank(b.id,lang);});
     const group=sectionGroups.find(g=>g.items.some(x=>x[0]===page));
     const breadcrumb=page!=='allprojects'?'<div class="section-breadcrumb"><button class="btn-outline small" data-page="allprojects">'+T('دليل الأقسام','Section directory')+'</button>'+(group?'<button class="btn-outline small" data-page="group-'+group.id+'">'+T(group.ar,group.en)+'</button>':'')+'</div>':'';
+    const cur=navItems.find(x=>x[0]===page),grp=sectionGroups.find(g=>'group-'+g.id===page);
+    document.title=page==='allprojects'?'HGW | '+T('فلسفة ورؤية — الأقسام والمشاريع','Philosophy, vision & sections'):'HGW | '+(cur?T(cur[2],cur[3]):grp?T(grp.ar,grp.en):'HGW');
     $('view').innerHTML=breadcrumb+(views[page]||allprojects)();
   }
   function groupDirectory(group){return heading(T(group.ar,group.en),T('اختر قسمًا فرعيًا لعرض محتواه وأدواته بصورة مستقلة.','Choose a subsection to view its content and tools separately.'))+'<div class="cards">'+group.items.map(([id,icon,ar,en])=>'<article class="card"><div class="symbol">'+icon+'</div><h2>'+safe(T(ar,en))+'</h2><button class="btn" data-page="'+id+'">'+T('افتح القسم','Open section')+'</button></article>').join('')+'</div>';}
@@ -115,12 +129,19 @@
     '<div class="panel tablewrap"><table class="table"><thead><tr><th>SKU</th><th>'+T('المنتج','Product')+'</th><th>'+T('البائع','Vendor')+'</th><th>'+T('الكمية','Quantity')+'</th><th>'+T('التنبيه','Alert')+'</th></tr></thead><tbody>'+
     db.products.map(p=>'<tr><td>'+p.id+'</td><td>'+safe(T(p.ar,p.name))+'</td><td>'+safe(p.vendor)+'</td><td>'+p.stock+'</td><td>'+pill(p.stock===0?T('نفد','Out'):p.stock<=3?T('منخفض','Low'):T('طبيعي','Normal'),p.stock<=3)+'</td></tr>').join('')+'</tbody></table></div>';
   }
-  function members(){return heading(T('العضوية والمزايا','Membership & benefits'),T('عضويات ومستويات ونقاط تجريبية دون حسابات مستخدمين حقيقية.','Sample membership tiers and points without real user accounts.'))+
-    '<div class="cards">'+db.members.map(m=>'<div class="card"><div class="symbol">🥉</div><h2>'+safe(m.name)+'</h2><p>'+T('العضوية','Tier')+': '+safe(m.tier)+'</p><div class="metric">'+T('النقاط','Points')+'<strong>'+m.points+'</strong></div></div>').join('')+'</div><div class="panel"><h3>'+T('الخطوة التالية','Next milestone')+'</h3><p>'+T('ربط النقاط لاحقاً بسجل معاملات قابل للتدقيق، بعد تحديد قواعد الكسب والاستبدال.','Implement a verifiable points ledger once earning and redemption policies are approved.')+'</p></div>';}
+  function members(){
+    const m=db.members[0]||{name:'',tier:'Bronze',points:0,ledger:[]};
+    const tier=tierFor(m.points),next=[...TIERS].reverse().find(x=>x.min>m.points);
+    const ledger=(m.ledger||[]).length?'<div class="tablewrap"><table class="table"><thead><tr><th>'+T('التاريخ','Date')+'</th><th>'+T('الطلب','Order')+'</th><th>'+T('النقاط','Points')+'</th></tr></thead><tbody>'+m.ledger.map(r=>'<tr><td>'+safe(r.date)+'</td><td>'+safe(r.order)+'</td><td>+'+Number(r.points)+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">'+T('لا توجد حركات نقاط بعد. تُضاف النقاط عند إكمال طلب تجريبي.','No points activity yet. Points are added when a demo order is fulfilled.')+'</p>';
+    return heading(T('العضوية والمزايا','Membership & benefits'),T('عضويات ومستويات ونقاط تجريبية دون حسابات مستخدمين حقيقية.','Sample membership tiers and points without real user accounts.'))+
+    '<div class="cards"><div class="card"><div class="symbol">'+tier.icon+'</div><h2>'+safe(m.name)+'</h2><p>'+T('العضوية','Tier')+': '+safe(tier.name)+'</p><div class="metric">'+T('النقاط','Points')+'<strong>'+m.points+'</strong><small>'+(next?T('المتبقي للمستوى '+next.name+': ','To reach '+next.name+': ')+(next.min-m.points):T('أعلى مستوى','Top tier reached'))+'</small></div></div></div>'+
+    '<div class="panel"><h3>'+T('سجل النقاط','Points ledger')+'</h3>'+ledger+'<p class="muted">'+T('قاعدة تجريبية: نقطة واحدة لكل دولار من الطلبات المكتملة؛ المستويات: Bronze، Silver من 250، Gold من 500. القواعد النهائية للكسب والاستبدال تحتاج اعتمادًا وسجلًا موثقًا على خادم.','Demo rule: 1 point per USD of a fulfilled order; tiers: Bronze, Silver from 250, Gold from 500. Final earning and redemption rules need approval and a server-side verifiable ledger.')+'</p></div>';
+  }
   function vendors(){return heading(T('المتاجر والبائعون','Stores & vendors'),T('قائمة توضيحية لمتاجر مستقلة، لا توجد حسابات بائعين مفعّلة.','Sample independent stores; no vendor accounts are active.'))+
     '<div class="cards">'+shopNames().map((s,i)=>'<div class="card"><div class="symbol">'+['🌱','🫒','🧺','♻️'][i%4]+'</div><h3>'+safe(s)+'</h3><p>'+T('عدد المنتجات','Products')+': '+db.products.filter(p=>p.vendor===s).length+'</p>'+pill(T('بيانات تجريبية','Sample'))+'</div>').join('')+'</div>';}
   function governance(){return heading(T('القرار الديمقراطي','Democratic governance'),T('محاكاة تعليمية للتصويت. النتائج ليست تصويتاً قانونياً أو موثق الهوية.','Educational mock voting only; results are neither legally binding nor identity-verified.'))+
-    '<div class="cards">'+db.proposals.map(p=>'<div class="card"><div class="symbol">🗳️</div><h3>'+safe(T(p.ar,p.title))+'</h3><p>'+T('موافق','Yes')+': '+p.yes+' · '+T('رافض','No')+': '+p.no+'</p><p>'+T('مشاركة محلية واحدة لكل متصفح في العرض','One local vote per browser in this demo')+'</p><div class="actions">'+button('voteYes',T('موافق','Yes'),p.id,'btn small',db.voted.includes(p.id))+button('voteNo',T('رافض','No'),p.id,'btn-outline small',db.voted.includes(p.id))+'</div></div>').join('')+'</div>';}
+    '<div class="cards">'+db.proposals.map(p=>'<div class="card"><div class="symbol">🗳️</div><h3>'+safe(T(p.ar,p.title))+'</h3><p>'+T('موافق','Yes')+': '+p.yes+' · '+T('رافض','No')+': '+p.no+'</p><p>'+T('مشاركة محلية واحدة لكل متصفح في العرض','One local vote per browser in this demo')+'</p><div class="actions">'+button('voteYes',T('موافق','Yes'),p.id,'btn small',db.voted.includes(p.id))+button('voteNo',T('رافض','No'),p.id,'btn-outline small',db.voted.includes(p.id))+'</div></div>').join('')+'</div>'+
+    '<div class="panel"><h3>'+T('اقتراح قرار جديد (تجريبي)','Propose a new decision (demo)')+'</h3><label>'+T('عنوان المقترح','Proposal title')+' <input id="newProposalTitle" class="filter" maxlength="120" placeholder="'+T('٥ أحرف على الأقل','At least 5 characters')+'"></label> '+button('newProposal',T('إضافة المقترح','Add proposal'),'','btn small')+'<p class="muted">'+T('يُحفظ المقترح في هذا المتصفح فقط.','The proposal is stored in this browser only.')+'</p></div>';}
   function transparency(){
     const total=db.orders.reduce((s,o)=>s+orderValue(o),0);
     return heading(T('الشفافية والمحاسبة','Transparency & accountability'),T('عرض واضح لما هو تجريبي، وما لم يتم تشغيله بعد.','Clear separation of simulated metrics from real operational data.'))+
@@ -163,14 +184,21 @@
     if(!db.cart.every(i=>Number.isInteger(i.qty)&&i.qty>0&&product(i.id)&&product(i.id).stock>=i.qty)){notify(T('راجع المخزون، الطلب لم يُنشأ','Check stock; order was not created'));return;}
     const items=deepCopy(db.cart);
     items.forEach(i=>{product(i.id).stock-=i.qty;});
-    const id='ECO-DEMO-'+String(db.nextOrder++).padStart(4,'0');
+    const id='HGW-DEMO-'+String(db.nextOrder++).padStart(4,'0');
     db.orders.unshift({id,items,status:'pending',payment:'unpaid',reserved:true,source:'demo'});
-    db.cart=[];save();closeDialog();navigate('orders');notify(T('تم إنشاء طلب تجريبي غير مدفوع: ','Created unpaid demo order: ')+id);
+    db.cart=[];save();closeDialog();flash(T('تم إنشاء طلب تجريبي غير مدفوع: ','Created unpaid demo order: ')+id);navigate('orders');
   }
   function transition(id,action){
     const o=db.orders.find(x=>x.id===id);if(!o)return;
     if(action==='confirm'&&o.status==='pending')o.status='confirmed';
-    else if(action==='fulfill'&&o.status==='confirmed')o.status='fulfilled';
+    else if(action==='fulfill'&&o.status==='confirmed'){
+      o.status='fulfilled';
+      if(!o.pointsAwarded&&db.members[0]){
+        const pts=Math.floor(orderValue(o)*POINTS_PER_USD),m=db.members[0];
+        m.points+=pts;m.ledger.unshift({order:o.id,points:pts,date:new Date().toISOString().slice(0,10)});
+        m.tier=tierFor(m.points).name;o.pointsAwarded=true;
+      }
+    }
     else if(action==='cancel'&&['pending','confirmed'].includes(o.status)){
       if(o.reserved){o.items.forEach(i=>{const p=product(i.id);if(p)p.stock+=i.qty;});o.reserved=false;}
       o.status='cancelled';
@@ -181,7 +209,7 @@
     const b=e.target.closest('button');if(!b)return;
     if(b.id==='euEidLogin'){showEuropeanEidInfo();return;}
     if(b.id==='bankidLogin'){showBankIdInfo();return;}
-    if(b.id==='lang'){lang=lang==='ar'?'en':'ar';render();return;}
+    if(b.id==='lang'){lang=lang==='ar'?'en':'ar';try{localStorage.setItem('hgw-lang',lang);}catch(e){}render();return;}
     if(b.id==='cartBtn'){showCart();return;}
     if(b.id==='closeDialog'){closeDialog();return;}
     if(b.dataset.page){navigate(b.dataset.page);return;}
@@ -194,6 +222,11 @@
     if(action==='remove'){db.cart=db.cart.filter(i=>i.id!==id);save();render();showCart();return;}
     if(action==='checkout'){checkout();return;}
     if(['confirm','cancel','fulfill'].includes(action)){transition(id,action);return;}
+    if(action==='newProposal'){
+      const inp=$('newProposalTitle'),title=(inp?inp.value:'').trim();
+      if(title.length<5){notify(T('اكتب عنوانًا من ٥ أحرف على الأقل','Enter a title of at least 5 characters'));return;}
+      db.proposals.push({id:'G-'+String(db.proposals.length+1).padStart(3,'0'),title,ar:title,yes:0,no:0});save();render();notify(T('تمت إضافة المقترح التجريبي','Demo proposal added'));return;
+    }
     if(action==='voteYes'||action==='voteNo'){
       if(db.voted.includes(id))return;
       const p=db.proposals.find(x=>x.id===id);if(!p)return;
@@ -210,4 +243,5 @@
   $('dialog').addEventListener('click',e=>{if(e.target===$('dialog'))closeDialog();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('dialog').classList.contains('hidden'))closeDialog();});
   render();
+  try{const f=sessionStorage.getItem('hgw-flash');if(f){sessionStorage.removeItem('hgw-flash');notify(f);}}catch(e){}
 })();

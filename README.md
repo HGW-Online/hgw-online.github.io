@@ -1,64 +1,41 @@
-# Eco Smart Mall — Bilingual Web Prototype
+# HGW — Humanity Global Welfare (bilingual static prototype)
 
-**Status:** Demo prototype. The repository is public and the demo is deployed via GitHub Pages. This remains a non-production prototype.
+**Status:** Demo prototype, published with GitHub Pages at <https://hgw-online.github.io/>. It is not a production commerce, banking, insurance or identity service.
 
-## Website
+## What the site contains
 
-The site is in [site/](site/). Its features include:
+- Vision, philosophy and strategic goals (home page) and a site directory (`/hgw/`).
+- 50+ independent section pages (commerce, protection, research, health, space infrastructure, value banks, governance), Arabic RTL / English LTR with the language choice remembered in the browser.
+- Local demo shop: cart, unpaid demo checkout, order management (pending → confirmed → fulfilled, or cancelled), stock reservation/restoration, inventory alerts.
+- Demo membership with a points ledger (1 point per USD of a fulfilled demo order; tier thresholds are demo values), local voting simulation with the ability to add demo proposals, and a transparency overview.
+- Identity & checkout sandbox (`checkout-sandbox.html`): a purely local simulation.
+- Installable PWA (manifest + service worker).
 
-- Arabic RTL / English LTR
-- Marketplace catalog and vendor cards
-- Local shopping cart and an **unpaid** demonstration checkout
-- Owner dashboard for order status: pending → confirmed → fulfilled, or cancellation
-- Cart-created demo orders reserve stock; cancelling a pending/confirmed order restores it once
-- Inventory alerts, member points, mock cooperative proposals, and transparency overview
-- Local browser storage for demo records only, with a reset control
-
-**Important:** The sample orders already present in the data **do not reserve stock**. A created demo order **does** reserve stock. The cancellation transition checks the reservation flag to avoid duplicate returns.
+All demo records live in the visitor's browser (`localStorage`) and can be reset from the Transparency page.
 
 ## Local preview
 
-Run a small static server from repository root:
-
-\`\`\`bash
+```bash
 python3 -m http.server 8000
-\`\`\`
+```
 
-Then open \`http://localhost:8000/site/\`.
-
-## Publish using Vercel
-
-1. Connect your Vercel account through its official app and authorize access to this private GitHub repository.
-2. Import \`sameelrefaey357-a11y/Eco-smart-mall\`.
-3. Deploy from repository root. The root \`vercel.json\` serves static files from \`site/\`.
-4. Review the Vercel-provided preview URL before making it public.
-
-**Security warning:** Password or authentication protection is not provided by this static prototype; public deployment exposes the demo to anyone with the URL. Do not add real customer records or financial information.
+Open <http://localhost:8000/>.
 
 ## Automated checks
 
-\`\`\`bash
-node --check site/app.js
-node --test tests/*.test.cjs
-\`\`\`
+```bash
+for f in *.js hgw/*.js; do node --check "$f"; done
+```
 
-## Not implemented (requires later work)
+## Not implemented (requires a backend and external contracts)
 
-- User identity and role-based access (site has no admin security)
-- Backend database, backups, or transactional order processing
-- Vendor logins, payment gateway, financial ledgers, token contracts
-- Real Glide data sync (SMART MALL GLOBAL is unchanged)
+- Real identity (BankID, eIDAS / EUDI Wallet), accounts, roles and sessions
+- Payment processing, bank accounts, financial ledgers, token or smart-contract operation
+- Central database, backups, atomic stock reservation, audit logs
 - Real governance voting or legal entity registry
+- Store-published Android/iOS packages
 
-Do not use the prototype for genuine commerce. Before any release, implement server-side auth, role separation, input validation, atomic stock reservation with inventory event logs, security/privacy review, and payment/legal compliance.
-
-## Current deployment and development
-
-- Public demo: https://sameelrefaey357-a11y.github.io/Eco-smart-mall/
-- `main` publishes the GitHub Pages site; `development` holds changes until reviewed and merged.
-- Mobile order tables use stacked cards on narrow screens.
-- GitHub Pages is static hosting: it cannot provide secure accounts, central inventory, payment processing or authoritative order records by itself.
-- Production readiness requires a backend, authentication, server-enforced roles, database migrations, concurrency-safe inventory reservations, backups, privacy controls, monitoring and security testing. None of these are claimed as implemented.
+GitHub Pages is static hosting and cannot provide any of the above by itself. Do not use the prototype for genuine commerce or to collect personal, identity or payment data.
 
 ## BankID authentication — integration plan
 
