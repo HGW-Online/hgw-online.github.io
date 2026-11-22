@@ -59,6 +59,16 @@
   ];
   const navItems=[['allprojects','▥','دليل الأقسام','Section directory'],...sectionGroups.flatMap(g=>g.items)];
   function navButton([id,icon,ar,en]){return '<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>';}
+  const authBase=()=>String(window.HGW_AUTH_BASE||'').replace(/\/$/,'');
+  function startLogin(){location.assign(authBase()+'/auth/login?return='+encodeURIComponent(location.pathname.replace(/^.*\/(?=[^\/]*$)/,'/')));}
+  function showSession(){
+    if(!authBase())return;
+    fetch(authBase()+'/auth/session',{credentials:'include'}).then(r=>r.json()).then(s=>{
+      if(!s.authenticated)return;
+      const b=$('bankidLogin');b.textContent=T('✓ ','✓ ')+(s.name||'HGW');b.dataset.signedIn='1';
+      b.onclick=ev=>{ev.stopPropagation();fetch(authBase()+'/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.reload());};
+    }).catch(()=>{});
+  }
   function flash(msg){try{sessionStorage.setItem('hgw-flash',msg);}catch(e){}}
   function navigate(id){
     const known=id==='allprojects'||navItems.some(x=>x[0]===id)||sectionGroups.some(g=>'group-'+g.id===id);
@@ -207,8 +217,8 @@
   }
   document.addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
-    if(b.id==='euEidLogin'){showEuropeanEidInfo();return;}
-    if(b.id==='bankidLogin'){showBankIdInfo();return;}
+    if(b.id==='euEidLogin'){if(authBase()){startLogin();return;}showEuropeanEidInfo();return;}
+    if(b.id==='bankidLogin'){if(authBase()){startLogin();return;}showBankIdInfo();return;}
     if(b.id==='lang'){lang=lang==='ar'?'en':'ar';try{localStorage.setItem('hgw-lang',lang);}catch(e){}render();return;}
     if(b.id==='cartBtn'){showCart();return;}
     if(b.id==='closeDialog'){closeDialog();return;}
@@ -243,5 +253,6 @@
   $('dialog').addEventListener('click',e=>{if(e.target===$('dialog'))closeDialog();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('dialog').classList.contains('hidden'))closeDialog();});
   render();
+  showSession();
   try{const f=sessionStorage.getItem('hgw-flash');if(f){sessionStorage.removeItem('hgw-flash');notify(f);}}catch(e){}
 })();

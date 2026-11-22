@@ -1,0 +1,10 @@
+name = "hgw-identity"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+SITE_ORIGIN = "https://hgw-online.github.io"
+OIDC_SCOPE = "openid profile"
+# Fill from the Signicat dashboard (see README):
+# OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_REDIRECT_URI, OIDC_ACR_VALUES
+# Secrets (never commit): wrangler secret put OIDC_CLIENT_SECRET ; wrangler secret put SESSION_SECRET
