@@ -36,3 +36,6 @@ One duly authorized partner feed with documented license; a live permitted listi
 
 ## Global coordinator and success fee (policy update)
 HGW is the neutral independent intermediary coordinating parties, **not** a bank, goods owner, insurer, guarantee provider or a universal licensed intermediary. Success-only HGW brokerage commissions accrue upon contractually defined completed and verified transaction, subject to reversal/refunds and statutory obligations. Optional independent providers may separately charge for services actually commissioned, even where a goods transaction does not close. See [Global coordinator charter](GLOBAL-COORDINATOR-CHARTER.md).
+
+## Switchable compliance per transaction
+Use a reviewed jurisdiction matrix activated when the listing becomes a quote or transaction. For each applicable country/state, require registration, relevant licensing, risk-based applicable KYC/KYB and consumer safeguards; hold on unknown or incompatible obligations. Prefer qualified licensed local partners in priority corridors to setting up branches in every country. See [Compliance matrix spec](COMPLIANCE-MATRIX-SPEC.md).
