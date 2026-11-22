@@ -41,4 +41,7 @@ The pages currently provide category browsing, local-only demo listings, settlem
 6. Test limited permitted transactions under human oversight before any live roll-out.
 
 ## Marketplace role and conditional success commission
-HGW facilitates counterparties; it is not the owner, guarantor, bank, insurer, lender or custodian. Brokerage commissions apply only to contractually defined successful and verified transactions, with refund/dispute rules. Fees owed to independent optional service providers remain separate. The target international nonprofit-owned holding company and local branches are aspirational until incorporation and licensing. See [Global coordinator charter](GLOBAL-COORDINATOR-CHARTER.md).
+HGW facilitates counterparties; it is not the owner, guarantor, bank, insurer, lender or custodian. Brokerage commissions apply only to contractually defined successful and verified transactions, with refund/dispute rules. Fees owed to independent optional service providers remain separate. The target international nonprofit-owned holding company and licensed local partner network is a target, and partners require independent authorization verification. See [Global coordinator charter](GLOBAL-COORDINATOR-CHARTER.md).
+
+## Switchable transaction compliance layer
+No universal compliance promise or required branch in every country. For each transaction, resolve relevant seller, buyer, asset, destination, service-provider and payment jurisdictions; apply versioned minimum registration, license, applicable KYC/KYB and consumer protection obligations; HOLD_REVIEW on missing, expired or conflicting rules. Licensed local partners in priority markets are the operational expansion mechanism. See [Compliance matrix](COMPLIANCE-MATRIX-SPEC.md).
